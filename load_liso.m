@@ -5,7 +5,11 @@
 function c = load_liso(opamps, filename)
 % Parse the file
 
-fid = fopen(filename, 'r', 'native', 'US-ASCII');
+[fid, msg] = fopen(filename, 'r', 'native', 'US-ASCII');
+if fid == -1
+    error(msg)
+end
+
 line_no = 0;
 
 % Initialize the Optickle model with only a laser carrier
