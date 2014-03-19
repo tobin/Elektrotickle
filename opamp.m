@@ -27,9 +27,8 @@ classdef opamp < component
                 obj.(params{ii}) = model.(params{ii});
             end
         end
-        function H = gain(obj, f)
-            s = 2i*pi*f;
-            H = obj.a0 / (1 + obj.a0 * s / obj.gbw) * ...   % Single pole model
+        function H = gain(obj, f)            
+            H = obj.a0 / (1 + obj.a0 * i * f / obj.gbw) * ...   % Single pole model
                 exp(-i * 2 * pi * obj.delay * f) * ...          % additional delay
                 prod(1 + i * f ./ obj.zero) / ...
                 prod(1 + i * f ./ obj.pole);
