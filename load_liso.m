@@ -65,6 +65,7 @@ while true
             
         case 'uoutput'
              pieces = regexp(args{2}, ':', 'split');
+             c.liso_mode = 'tf';
              c.setOutputNodeName(pieces{1});  % FIXME
              
         case 'freq'  % freq lin|log startfreq stopfreq steps
@@ -81,6 +82,10 @@ while true
                         line_no, args{2});
             end
             c.setFreqs(f);
+        case 'noise' 
+            c.liso_mode = 'noise';
+            c.setOutputNodeName(args{2});
+             
         otherwise
             fprintf('line %d: "%s" command is not supported\n', line_no, args{1});
     end
