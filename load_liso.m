@@ -61,6 +61,7 @@ while true
             
         case 'uinput'  
             c.setInputNodeName(args{2});
+            c.input_impedance = parse_value(args{3});
             %c.setInputImpedance(args{3});
             
         case 'uoutput'

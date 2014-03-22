@@ -26,6 +26,7 @@ classdef circuit < handle
         
         input_node_name;          % input node (name)
         input_node = 0;           % input node (serial number)
+        input_impedance = 0;
         
         output_node_name;         % output node (name)
         output_node = 0;          % output node (serial number)
@@ -274,6 +275,9 @@ classdef circuit < handle
                 n = obj.getVariableIndex('node', obj.output_node_name);
                 e_n = sparse(obj.n_components + obj.n_nodes + 1, 1);
                 e_n(n, 1) = 1;
+                
+                % Equation (17)
+                A(end, obj.n_components + 1) = obj.input_impedance;
                 
                 yhat = transpose(A) \ e_n;   % Equation (77)
                 
