@@ -28,10 +28,16 @@ classdef opamp < component
             end
         end
         function H = gain(obj, f)            
-            H = obj.a0 / (1 + obj.a0 * i * f / obj.gbw) * ...   % Single pole model
-                exp(-i * 2 * pi * obj.delay * f) * ...          % additional delay
-                prod(1 + i * f ./ obj.zero) / ...
-                prod(1 + i * f ./ obj.pole);
+            H = obj.a0 / (1 + obj.a0 * 1i * f / obj.gbw) * ...   % Single pole model
+                exp(-1i * 2 * pi * obj.delay * f) * ...          % additional delay
+                prod(1 + 1i * f ./ obj.zero) / ...
+                prod(1 + 1i * f ./ obj.pole);
+        end
+        function Un = getNoiseVoltage(obj, f, params)
+            Un = obj.un * sqrt(1 + obj.uc / f);   % Section 12.2, Equation (8)
+        end  
+        function In = getNoiseCurrent(obj, f, params)
+            In = obj.in * sqrt(1 + obj.ic / f);
         end
         function n = getNodeNames(obj)
             n = {obj.node1, obj.node2, obj.node3};

@@ -24,6 +24,12 @@ classdef component < handle
         function passive = isPassive(obj)
             passive = obj.passive;
         end
+        function Un = getNoiseVoltage(obj, f, T)
+            Un = 0;
+        end
+        function In = getNoiseCurrent(obj, f, T)
+            In = 0;
+        end
     end 
 
 end

@@ -6,6 +6,9 @@ classdef resistor < component
     end
     function Z = impedance(obj, f)
         Z = obj.value;
+    end
+    function Un = getNoiseVoltage(obj, f, params)       
+        Un = sqrt(4 * params.kB * params.T * obj.value);
     end    
     end
 end
