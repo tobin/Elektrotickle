@@ -62,7 +62,10 @@ while true
      if any(strcmp(field, {'zero', 'pole'}))
        % Add this value to a list
        if length(value)==2
-           value(2) = value(1);  % HACK!!
+           fk = value(1);  % frequency
+           Qk = value(2);  % Q factor
+           theta = acos(1 / (2 * Qk));           
+           value = fk * [exp(-1i * theta), exp(1i * theta)];
        end
        opamps.(name).(field) = [opamps.(name).(field), value];
        continue
