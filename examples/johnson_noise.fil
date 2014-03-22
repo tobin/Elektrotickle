@@ -1,0 +1,5 @@
+r r1 100k gnd n1
+uinput n1 1M
+freq log 1k 1M 100
+noisy all
+noise n1 sum
