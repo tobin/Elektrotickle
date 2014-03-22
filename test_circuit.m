@@ -1,6 +1,6 @@
 %% Test Elektrotickle by comparing with LISO
 
-filename = 'examples/johnson_noise';   % LISO file without extension
+filename = 'examples/whitening';   % LISO file without extension
 
 opamps = load_opamps('opamp.lib');
 c      = load_liso(opamps, [filename '.fil']);
@@ -32,12 +32,14 @@ xlabel('frequency [Hz]');
 figure(2)
 ax(3) = subplot(1,1,1);
 noiseAC_total = sqrt(sum(noiseAC.^2));
-loglog(f, noiseAC_total, 'r');
+loglog(f, noiseAC_total, 'r', f, noiseAC);
 ylabel('Volts / sqrt Hz');
 xlabel('frequency [Hz]');
 title(sprintf('Sum of all noises seen at "%s"', c.output_node_name), ...
     'interpreter', 'none');
 
+legend(cellfun(@(ii) c.getVariableName(ii), num2cell(1:size(noiseAC,1)), 'UniformOutput', false), ...
+    'Location','Best');
 %% Add the LISO results to the plot
 
 liso_dir = '/home/tobin/c/filter';
@@ -70,7 +72,7 @@ if strcmp(c.liso_mode, 'tf')
 elseif strcmp(c.liso_mode, 'noise');
     fprintf('LISO mode is NOISE\n');
     hold(ax(3), 'all');
-    plot(ax(3), liso_result(:,1), liso_result(:,2), 'o');
+    plot(ax(3), liso_result(:,1), liso_result(:,2:end), 'o');
     hold(ax(3), 'off');
 else
     error('Unknown LISO mode');

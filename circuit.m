@@ -123,6 +123,18 @@ classdef circuit < handle
             end
         end
         
+        function varName = getVariableName(obj, index)
+            if index <= obj.n_components
+                varName = obj.components{index}.name;
+            elseif index == obj.n_components + 1
+                varName = 'i[in]';
+            elseif index <= obj.n_components + 1 + obj.n_nodes
+                varName = obj.node_names{index - obj.n_components - 1};
+            else
+                error('Invalid variable index');
+            end
+        end
+        
         function M = make_matrix(obj, f)            
             %  M = make_matrix(obj, f) 
             %
