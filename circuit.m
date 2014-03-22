@@ -287,10 +287,18 @@ classdef circuit < handle
                     
                     % Current noise
                     if isa(thing, 'opamp')
-                        % Opamps inject current noise into their output
-                        % node
-                        opamp_output_node = obj.getNodeNumber(thing.node3);
-                        k(obj.n_components + 1 + opamp_output_node) = ...
+                        % Opamps inject current noise into their input
+                        % nodes!
+                        opamp_int_node_p = obj.getNodeNumber(thing.node1);
+                        opamp_int_node_m = obj.getNodeNumber(thing.node2);
+                        
+                        % FIXME: Should add in quadrature in case there are
+                        % multiple opamps with their inputs tied to the
+                        % same nodes.
+                        k(obj.n_components + 1 + opamp_int_node_p) = ...
+                            thing.getNoiseCurrent(f, obj.params);
+                        
+                        k(obj.n_components + 1 + opamp_int_node_m) = ...
                             thing.getNoiseCurrent(f, obj.params);
                     end
                 end
