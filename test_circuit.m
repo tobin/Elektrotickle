@@ -30,6 +30,10 @@ db = @(x) 20*log10(abs(x));
 opamps = load_opamps(opamps_filename);
 c      = load_liso(opamps, [filename '.fil']);
 
+fprintf('Circuit equations:\n\n');
+c.print_equations();
+fprintf('\n');
+
 [f, sigAC, noiseAC] = c.tickle();
 nOutputNodeVar = c.getVariableIndex('node', c.output_node_name);
 
