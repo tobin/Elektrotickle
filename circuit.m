@@ -318,22 +318,62 @@ classdef circuit < handle
         end
         
         function print_equations(obj)
+            % c.print_equations()
+            %
+            % Print out the equations that will be used to solve a circuit.
+            % For debugging purposes mainly.
+            
+            % Compute the matrix at (s=1)
             M = obj.make_matrix(1/2*pi);
             
             for ii = 1:size(M, 1)
+                
+                % Keep track of which variable is the first to have a
+                % non-zero coefficient, just to suppress the leading plus
+                % sign.
+                first = true;
+                
                 for jj = 1:size(M, 2)
-                    if M(ii,jj) ~= 0
-                        fprintf('+ (%s)', num2str(full(M(ii,jj))));
-                        if jj <= obj.n_components
-                            fprintf('i[%s]', obj.components{jj}.name);
-                        elseif jj == obj.n_components + 1
-                            fprintf('i[in]');
-                        else
-                            fprintf('U[%s]', obj.getNodeName(jj - obj.n_components - 1));
+                    
+                    matrix_element = full(M(ii,jj));
+                    
+                    if matrix_element ~= 0                        
+                                              
+                        if abs(matrix_element) == 1
+                           if sign(matrix_element) == -1
+                               fprintf(' - ');
+                           else
+                               if ~first
+                                   fprintf(' + ');
+                               end
+                           end
                         end
+                        
+                        first = false;
+                        
+                        if abs(matrix_element) ~= 1
+                            fprintf('%g' , abs(matrix_element));
+                        end
+                        
+                        var_name = obj.getVariableName(jj);
+                        
+                        % FIXME:KLUDGE
+                        if jj <= obj.n_components
+                            var_name = sprintf('i[%s]', var_name);
+                        elseif jj > obj.n_components + 1
+                            var_name = sprintf('U[%s]', var_name);
+                        end
+                        
+                        fprintf(' %s ', var_name);
                     end
                 end
-                fprintf('\n');
+                
+                if ii == size(M,1)
+                    fprintf(' = 1\n');
+                else
+                    fprintf(' = 0\n');
+                end
+                
             end
             
         end
