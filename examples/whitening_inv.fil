@@ -1,0 +1,14 @@
+# https://www.circuitlab.com/circuit/7qefs9/whitening-inverting/
+
+c c1 10u nin n1
+r r1 430 n1 nm
+r r3 43k nin nm
+
+r r2 43k nm nout
+c c2 47p nm nout
+
+op o1 lt1124 gnd nm nout
+
+freq log 1 100k 100
+uinput nin 0
+uoutput nout:db:deg
