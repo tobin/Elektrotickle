@@ -9,6 +9,10 @@ if isempty(filename)
 end
 
 fid = fopen(filename, 'r', 'native', 'US-ASCII');
+if fid == -1
+    error(msg)
+end
+
 line_no = 0;
 
 allowed_fields = {'name', 'a0', 'gbw', 'delay', 'zero', 'pole', ...
