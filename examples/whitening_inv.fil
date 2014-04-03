@@ -1,10 +1,13 @@
+# https://www.circuitlab.com/circuit/7qefs9/whitening-inverting/
 
-# https://www.circuitlab.com/circuit/62vd4a/whitening-non-inverting/
+c c1 10u nin n1
 r r1 430 n1 nm
+r r3 43k nin nm
+
 r r2 43k nm nout
 c c2 47p nm nout
-op o1 op27 nin nm nout
-c c1 10u gnd n1
+
+op o1 lt1124 gnd nm nout
 
 freq log 1 100k 100
 uinput nin 0
