@@ -8,7 +8,7 @@ if isempty(filename)
   filename = 'opamp.lib';
 end
 
-fid = fopen(filename, 'r', 'native', 'US-ASCII');
+[fid,msg] = fopen(filename, 'r', 'native', 'US-ASCII');
 if fid == -1
     error(msg)
 end
