@@ -39,21 +39,21 @@ while true
     switch args{1}
         case 'r'     % r name value node1 node2 (resistor)
             name = args{2};
-            value = parse_value(args{3});
+            value = circuit.parse_value(args{3});
             node1 = args{4};
             node2 = args{5};
             c.addComponent(resistor(name, value, node1, node2));
             
         case 'c'     % c name value node1 node2 (capacitor)
             name = args{2};
-            value = parse_value(args{3});
+            value = circuit.parse_value(args{3});
             node1 = args{4};
             node2 = args{5};
             c.addComponent(capacitor(name, value, node1, node2));
         
         case 'l'     % l name value node1 node2 (inductor)
             name = args{2};
-            value = parse_value(args{3});
+            value = circuit.parse_value(args{3});
             node1 = args{4};
             node2 = args{5};
             c.addComponent(inductor(name, value, node1, node2));
@@ -68,7 +68,7 @@ while true
             
         case 'uinput'
             c.setInputNodeName(args{2});
-            c.input_impedance = parse_value(args{3});
+            c.input_impedance = circuit.parse_value(args{3});
             %c.setInputImpedance(args{3});
             
         case 'uoutput'
@@ -77,9 +77,9 @@ while true
             c.setOutputNodeName(pieces{1});  % FIXME
             
         case 'freq'  % freq lin|log startfreq stopfreq steps
-            startfreq = parse_value(args{3});
-            stopfreq = parse_value(args{4});
-            steps = parse_value(args{5});
+            startfreq = circuit.parse_value(args{3});
+            stopfreq = circuit.parse_value(args{4});
+            steps = circuit.parse_value(args{5});
             switch args{2}
                 case 'lin'
                     f = linspace(startfreq, stopfreq, steps);
@@ -106,25 +106,3 @@ fclose(fid);
 
 end
 
-function value = parse_value(str)
-
-multipliers.G = 1e9;
-multipliers.M = 1e6;
-multipliers.k = 1e3;
-multipliers.m = 1e-3;
-multipliers.u = 1e-6;
-multipliers.n = 1e-9;
-multipliers.p = 1e-12;
-multipliers.f = 1e-15;
-
-[A,count,errmsg,nextindex] = sscanf(str, '%f%[GMkmunpf]');
-value = A(1);
-
-if count==2
-    suffix = char(A(2));
-    if ~any(strcmp(suffix, fields(multipliers)))
-        fprintf('Unknown suffix "%s" in "%s"\n', A(2), str);
-    end
-    value = value * multipliers.(suffix);
-end
-end
