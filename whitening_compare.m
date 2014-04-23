@@ -27,7 +27,7 @@ figure(1)
 % Plot the transfer function
 ax = subplot(2,1,1);
 semilogx(f1, db(tf1), ...
-         f2, db(tf2));
+    f2, db(tf2));
 ylabel('dB');
 
 legend('inverting', 'non-inverting', 'Location', 'Best');
@@ -37,7 +37,7 @@ grid on
 
 ax(2) = subplot(2,1,2);
 semilogx(f1, angle(tf1) * 180/pi, ...
-         f2, angle(tf2) * 180/pi);
+    f2, angle(tf2) * 180/pi);
 ylabel('degrees');
 xlabel('frequency [Hz]');
 grid on

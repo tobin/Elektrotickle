@@ -35,15 +35,15 @@ while true
     % Split the line into tokens deliminated by whitespace
     args = regexp(s, '\s+', 'split');
     
-   
+    
     switch args{1}
         case 'r'     % r name value node1 node2 (resistor)
             name = args{2};
             value = parse_value(args{3});
             node1 = args{4};
-            node2 = args{5};            
+            node2 = args{5};
             c.addComponent(resistor(name, value, node1, node2));
-                
+            
         case 'c'     % c name value node1 node2 (capacitor)
             name = args{2};
             value = parse_value(args{3});
@@ -52,23 +52,23 @@ while true
             c.addComponent(capacitor(name, value, node1, node2));
             
         case 'op'    % op name type node+ node- nodeout
-                        name = args{2};
+            name = args{2};
             value = args{3};
             node1 = args{4};
             node2 = args{5};
             node3 = args{6};
             c.addComponent(opamp(name, value, node1, node2, node3, opamps));
             
-        case 'uinput'  
+        case 'uinput'
             c.setInputNodeName(args{2});
             c.input_impedance = parse_value(args{3});
             %c.setInputImpedance(args{3});
             
         case 'uoutput'
-             pieces = regexp(args{2}, ':', 'split');
-             c.liso_mode = 'tf';
-             c.setOutputNodeName(pieces{1});  % FIXME
-             
+            pieces = regexp(args{2}, ':', 'split');
+            c.liso_mode = 'tf';
+            c.setOutputNodeName(pieces{1});  % FIXME
+            
         case 'freq'  % freq lin|log startfreq stopfreq steps
             startfreq = parse_value(args{3});
             stopfreq = parse_value(args{4});
@@ -83,10 +83,10 @@ while true
                         line_no, args{2});
             end
             c.setFreqs(f);
-        case 'noise' 
+        case 'noise'
             c.liso_mode = 'noise';
             c.setOutputNodeName(args{2});
-             
+            
         otherwise
             fprintf('line %d: "%s" command is not supported\n', line_no, args{1});
     end
@@ -100,24 +100,24 @@ fclose(fid);
 end
 
 function value = parse_value(str)
-    
-    multipliers.G = 1e9;
-    multipliers.M = 1e6;
-    multipliers.k = 1e3;    
-    multipliers.m = 1e-3;
-    multipliers.u = 1e-6;
-    multipliers.n = 1e-9;
-    multipliers.p = 1e-12;
-    multipliers.f = 1e-15;
-    
-    [A,count,errmsg,nextindex] = sscanf(str, '%f%[GMkmunpf]');
-    value = A(1);
-  
-    if count==2  
-        suffix = char(A(2));
-        if ~any(strcmp(suffix, fields(multipliers)))
-            fprintf('Unknown suffix "%s" in "%s"\n', A(2), str);
-        end
-        value = value * multipliers.(suffix);
+
+multipliers.G = 1e9;
+multipliers.M = 1e6;
+multipliers.k = 1e3;
+multipliers.m = 1e-3;
+multipliers.u = 1e-6;
+multipliers.n = 1e-9;
+multipliers.p = 1e-12;
+multipliers.f = 1e-15;
+
+[A,count,errmsg,nextindex] = sscanf(str, '%f%[GMkmunpf]');
+value = A(1);
+
+if count==2
+    suffix = char(A(2));
+    if ~any(strcmp(suffix, fields(multipliers)))
+        fprintf('Unknown suffix "%s" in "%s"\n', A(2), str);
     end
+    value = value * multipliers.(suffix);
+end
 end

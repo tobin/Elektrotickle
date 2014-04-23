@@ -35,7 +35,7 @@ classdef circuit < handle
             'kB', 1.3806488e-23, ...  % Bolzmann's constant
             'T',  25 + 273.15 ...     % Temperature
             );
-
+        
         liso_mode;
         f = [];                   % frequency vector
     end
@@ -136,8 +136,8 @@ classdef circuit < handle
             end
         end
         
-        function M = make_matrix(obj, f)            
-            %  M = make_matrix(obj, f) 
+        function M = make_matrix(obj, f)
+            %  M = make_matrix(obj, f)
             %
             %  Form the matrix representing the circuit.  This matrix is
             %  later used to solve the circuit, by forming a linear
@@ -155,15 +155,15 @@ classdef circuit < handle
             %  Each component generates one equation (for passive
             %  components, this is Ohm's law), and each node generates one
             %  equation (in which the currents into it sum to zero).
-                            
+            
             node_gnd = 0;
             
             % Allocate space for the matrix
             M = sparse(obj.n_components + obj.n_nodes + 1);
             
-            % Iterate over the components   
+            % Iterate over the components
             for ii = 1:obj.n_components
-                component = obj.components{ii};                            
+                component = obj.components{ii};
                 
                 % TODO: If we want a proper object-oriented design, the
                 % individual components should generate their own
@@ -176,7 +176,7 @@ classdef circuit < handle
                     
                     % Passive components
                     M(ii, ii) = component.impedance(f);
-                
+                    
                     % The ground node is assumed to have potential zero,
                     % and no equations are written for it.
                     if node1 ~= node_gnd
@@ -244,7 +244,7 @@ classdef circuit < handle
             f_vect = obj.f;
             if length(varargin) > 1
                 f_vect = varargin{1};
-            end            
+            end
             
             if obj.output_node == 0
                 error('No output node specified');
@@ -256,8 +256,8 @@ classdef circuit < handle
             noiseAC = zeros(obj.n_components + obj.n_nodes + 1, n_freqs);
             
             % The last row in the equation A x = y is the one that sets the
-            % input voltage to 1.            
-            y = sparse(obj.n_components + obj.n_nodes + 1, 1);            
+            % input voltage to 1.
+            y = sparse(obj.n_components + obj.n_nodes + 1, 1);
             y(end, 1) = 1;
             
             for ii = 1:n_freqs
@@ -298,7 +298,7 @@ classdef circuit < handle
                         
                         % FIXME: Should add in quadrature in case there are
                         % multiple opamps with their inputs tied to the
-                        % same nodes.                        
+                        % same nodes.
                         if opamp_input_node_p ~= 0
                             k(obj.n_components + opamp_input_node_p) = ...
                                 thing.getNoiseCurrent(f, obj.params);
@@ -337,16 +337,16 @@ classdef circuit < handle
                     
                     matrix_element = full(M(ii,jj));
                     
-                    if matrix_element ~= 0                        
-                                              
+                    if matrix_element ~= 0
+                        
                         if abs(matrix_element) == 1
-                           if sign(matrix_element) == -1
-                               fprintf(' - ');
-                           else
-                               if ~first
-                                   fprintf(' + ');
-                               end
-                           end
+                            if sign(matrix_element) == -1
+                                fprintf(' - ');
+                            else
+                                if ~first
+                                    fprintf(' + ');
+                                end
+                            end
                         end
                         
                         first = false;
