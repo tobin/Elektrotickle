@@ -50,6 +50,13 @@ while true
             node1 = args{4};
             node2 = args{5};
             c.addComponent(capacitor(name, value, node1, node2));
+        
+        case 'l'     % l name value node1 node2 (inductor)
+            name = args{2};
+            value = parse_value(args{3});
+            node1 = args{4};
+            node2 = args{5};
+            c.addComponent(inductor(name, value, node1, node2));
             
         case 'op'    % op name type node+ node- nodeout
             name = args{2};
