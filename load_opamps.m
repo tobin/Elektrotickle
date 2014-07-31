@@ -60,23 +60,28 @@ while true
   % Check if multiple arguments
   value = regexp(value, '\s+', 'split');
   value = cellfun(@parse_value, value, 'UniformOutput', true);
-	  
+  
+  % Check for complex poles or zeroes
+  if any(strcmp(field, {'zero', 'pole'}))
+      if length(value)==2
+          fk = value(1);  % frequency
+          Qk = value(2);  % Q factor
+          theta = acos(1 / (2 * Qk));
+          value = fk * [exp(-1i * theta), exp(1i * theta)];
+      end
+  end
+  
   % Check whether this parameter has already been specified
   if isfield(opamps, name) && isfield(opamps.(name), field)
-     if any(strcmp(field, {'zero', 'pole'}))
-       % Add this value to a list
-       if length(value)==2
-           fk = value(1);  % frequency
-           Qk = value(2);  % Q factor
-           theta = acos(1 / (2 * Qk));           
-           value = fk * [exp(-1i * theta), exp(1i * theta)];
-       end
-       opamps.(name).(field) = [opamps.(name).(field), value];
-       continue
-     else
-       fprintf('Duplicate specification of "%s" for opamp model "%s" on line %d.\n', ...
-	     field, name, line_no);
-     end
+      % Only the pole & zero attributes can be specified multiple times
+      if any(strcmp(field, {'zero', 'pole'}))
+          % Add this value to a list
+          opamps.(name).(field) = [opamps.(name).(field), value];
+          continue
+      else
+          fprintf('Duplicate specification of "%s" for opamp model "%s" on line %d.\n', ...
+              field, name, line_no);
+      end
   end
 
   opamps.(name).(field) = value;
