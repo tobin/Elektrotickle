@@ -159,7 +159,7 @@ classdef circuit < handle
             node_gnd = 0;
             
             % Allocate space for the matrix
-            M = sparse(obj.n_components + obj.n_nodes + 1);
+            M = sparse([]);
             
             % Iterate over the components
             for ii = 1:obj.n_components
