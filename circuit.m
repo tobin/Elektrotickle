@@ -339,15 +339,13 @@ classdef circuit < handle
                     
                     if matrix_element ~= 0
                         
-                        if abs(matrix_element) == 1
-                            if sign(matrix_element) == -1
-                                fprintf(' - ');
-                            else
-                                if ~first
-                                    fprintf(' + ');
-                                end
+                        if sign(matrix_element) == -1
+                            fprintf(' - ');
+                        else
+                            if ~first
+                                fprintf(' + ');
                             end
-                        end
+                        end                        
                         
                         first = false;
                         
