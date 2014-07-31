@@ -5,7 +5,7 @@ function opamps = load_opamps(filename)
 % Parse the file
 
 if isempty(filename)
-  filename = 'opamp.lib';
+    filename = 'opamp.lib';
 end
 
 [fid,msg] = fopen(filename, 'r', 'native', 'US-ASCII');
@@ -59,7 +59,7 @@ while true
   
   % Check if multiple arguments
   value = regexp(value, '\s+', 'split');
-  value = cellfun(@parse_value, value, 'UniformOutput', true);
+  value = cellfun(@circuit.parse_value, value, 'UniformOutput', true);
   
   % Check for complex poles or zeroes
   if any(strcmp(field, {'zero', 'pole'}))
@@ -88,31 +88,6 @@ while true
 end
 
 fclose(fid);
-
-
 end
 
-
-function value = parse_value(str)
-    
-    multipliers.G = 1e9;
-    multipliers.M = 1e6;
-    multipliers.k = 1e3;    
-    multipliers.m = 1e-3;
-    multipliers.u = 1e-6;
-    multipliers.n = 1e-9;
-    multipliers.p = 1e-12;
-    multipliers.f = 1e-15;
-    
-    [A,count,errmsg,nextindex] = sscanf(str, '%f%[GMkmunpf]');
-    value = A(1);
-  
-    if count==2  
-        suffix = char(A(2));
-        if ~any(strcmp(suffix, fields(multipliers)))
-            fprintf('Unknown suffix "%s" in "%s"\n', A(2), str);
-        end
-        value = value * multipliers.(suffix);
-    end
-end
 
